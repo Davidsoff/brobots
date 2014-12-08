@@ -9,5 +9,3 @@ wazzup brahh!
 * cog 6   => IR
 * cog 7   => whiskers
 * cog 8   => music
-blablabla
-hallo
