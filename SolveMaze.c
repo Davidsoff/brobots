@@ -16,6 +16,7 @@ void updateDistanceCog();
 void driveStateCog();
 void drive();
 void escape();
+void stop();
 void turn_right();
 void turn_left();
 
@@ -71,8 +72,10 @@ void driveStateCog(){
       case -1:
         left_turn_count = 0;
         escape();
+        state = 0;
       break;
       case 0:
+        stop();
       break;
       case 1:
         left_turn_count = 0;
@@ -81,10 +84,12 @@ void driveStateCog(){
       case 2:
         left_turn_count = 0;
         turn_right();
+        state = 0;
       break;
       case 3:
         left_turn_count++;
         turn_left();
+        state = 0;
       break;
       default:
         left_turn_count = 0;
@@ -105,12 +110,15 @@ void escape(){
   drive_goto(-5,-5);
 }
 
+void stop(){
+  drive_speed(0,0);
+}
+
 //robot draait 90 graden naar rechts          
 void turn_right(){
   drive_goto(-5, -5);
   drive_goto(26, -25);
   drive_goto(40, 40);
-  state = 1;
 }
 
 //robot draait 90 graden naar links
@@ -120,5 +128,4 @@ void turn_left(){
     drive_goto(-10, -10);
   }
   drive_goto(-26, 25);
-  state = 0;
 }    
