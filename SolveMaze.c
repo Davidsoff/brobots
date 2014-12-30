@@ -20,9 +20,6 @@ void stop();
 void turn_right();
 void turn_left();
 
-
-
-
 int main(){
   //initialisation
   int mode = 0;
@@ -35,25 +32,30 @@ int main(){
   while(1){
     print("front : %d\n", distance[FRONT]);
     print("right : %d\n", distance[RIGHT]);
+    print("state : %d\n", state);
     int right = distance[RIGHT];
     int front = distance[FRONT];
 
+
+    if(front>10){
+      state = 1;
+    }
     //Rechts grote afstand, er kan een bocht worden gemaakt, deze functie wordt aangeroepen
     if(right > 15){
       state = 2;     
     }else{
-      if(front <= 5){
-        state = 1;
+      if(front <= 10){
+        if(right <=15){
+          state = 3;
+        }
       }
     }
-    if(front < 5 ){
+    if(front <= 5){
         state = -1;    
     }
   }   
   return 0; 
 }  
-
-
 
 void updateDistanceCog(){
   while(1){
@@ -64,7 +66,6 @@ void updateDistanceCog(){
     
   }  
 }  
-
 
 void driveStateCog(){
   while(1){
@@ -103,11 +104,12 @@ void driveStateCog(){
 //robot rijd naar voren
 void drive(){
   drive_speed(20, 20);
-  low(26);
 }
 
 void escape(){
+  high(26);
   drive_goto(-5,-5);
+  low(26);
 }
 
 void stop(){
@@ -116,16 +118,13 @@ void stop(){
 
 //robot draait 90 graden naar rechts          
 void turn_right(){
-  drive_goto(-5, -5);
+  drive_goto(-2, -2);
   drive_goto(26, -25);
-  drive_goto(40, 40);
+  drive_goto(50, 50);
 }
 
 //robot draait 90 graden naar links
 void turn_left(){
-  //iteration is de hoeveelste keer dat de functie is uit gevoerd.
-  if(left_turn_count > 1){
-    drive_goto(-10, -10);
-  }
+  drive_goto(0,0);
   drive_goto(-26, 25);
 }    
