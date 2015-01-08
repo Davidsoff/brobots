@@ -28,6 +28,8 @@ void turnServo();
 //MAIN FUNCTION
 int main()                                  
 {
+  maxDistance = ping_cm(pingport);//measure the distance between the ping sensor and the ground
+  
   forwards();//Robot drives till its over the ledge
   
   turnServo();//Servo turns so the switch is downwards
@@ -66,7 +68,7 @@ int stopSwitch()
 
 void forwards()
 {
-  while(pingDistance()<maxDistance)
+  while(pingDistance()<=maxDistance)
   {
     drive_speed(fwspeed,fwspeed);
   }
