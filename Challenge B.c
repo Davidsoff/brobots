@@ -1,12 +1,11 @@
-/*
-  Blank Simple Project.c
-  http://learn.parallax.com/propeller-c-tutorials 
-*/
+
 #include "simpletools.h"                      // Include simple tools
 
 int main()                                    // Main function
 {
-  // Add startup code here.
+  // while ultrasone sensor afstand =< 50mm {Blijf rijden}
+  //if afstand => 50mm {Stop & Servo draaien}
+  //naar achteren rijden. if(micro switch is ingedrukt){stop}    
 
  
   while(1)
