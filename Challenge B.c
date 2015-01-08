@@ -6,15 +6,15 @@
 
 
 //PARAMETERS
-int switchport = 3;
-int pingport = ;
-int servoport = ;
+const int switchport = 0;
+int pingport = 1;
+int servoport = 16;
 int servospeed = 25;
-int servotime = ;
+int servotime = 1000;
 int fwspeed = 10;
 int bwspeed = -10;
-int compdistance = 8;//distance to comensate for the location of the pingsensor
-int maxDistance = 30;
+int compdistance = 20;//distance to comensate for the location of the pingsensor
+int maxDistance = 10;//ping distance
 
 //FUNCTION INITIALISATION
 int pingDistance();
@@ -50,9 +50,9 @@ int pingDistance()
 
 int stopSwitch()
 {
-  int switch = input(switchport);
+  int microswitch = input(switchport);
   
-  if(switch == 0)
+  if(microswitch == 0)
   {
     return 0; //switch is pressed
   }
@@ -70,16 +70,19 @@ void forwards()
   {
     drive_speed(fwspeed,fwspeed);
   }
-  drive_speed(0,0);   
-  drive_goto(compdistance, compdistance)       
+  drive_speed(0,0);
+  pause(1000);   
+  drive_goto(compdistance, compdistance);       
 }
 
 
 void backwards()
 {
-  while(stopSwitch()=1) //switch is not pressed
+  int switchstatus=stopSwitch();
+  while(switchstatus==1) //switch is not pressed
   {
     drive_speed(bwspeed,bwspeed);
+    switchstatus=stopSwitch();
   }
   drive_speed(0,0);          
 }      
@@ -89,7 +92,7 @@ void backwards()
 void turnServo()
 {
   servo_speed(servoport, servospeed);
-  wait(servotime);
+  pause(servotime);
   servo_speed(servoport, 0);
 }
 
