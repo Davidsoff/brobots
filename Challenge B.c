@@ -13,12 +13,19 @@ int servospeed = 25;
 int servotime = ;
 int fwspeed = 10;
 int bwspeed = -10;
-int maxDistance = ;
+int compdistance = 8;//distance to comensate for the location of the pingsensor
+int maxDistance = 30;
+
+//FUNCTION INITIALISATION
+int pingDistance();
+int stopSwitch();
+void forwards();
+void backwards();
+void turnServo();
 
 
 
-
-
+//MAIN FUNCTION
 int main()                                  
 {
   forwards();//Robot drives till its over the ledge
@@ -29,7 +36,7 @@ int main()
 }
 
 
-
+//FUNCTIONS
 int pingDistance()
 {
   int distance = ping_cm(pingport);
@@ -41,7 +48,7 @@ int pingDistance()
 
 
 
-int stopHere()
+int stopSwitch()
 {
   int switch = input(switchport);
   
@@ -63,13 +70,14 @@ void forwards()
   {
     drive_speed(fwspeed,fwspeed);
   }
-  drive_speed(0,0);          
+  drive_speed(0,0);   
+  drive_goto(compdistance, compdistance)       
 }
 
 
 void backwards()
 {
-  while(stopHere()=1) //switch is not pressed
+  while(stopSwitch()=1) //switch is not pressed
   {
     drive_speed(bwspeed,bwspeed);
   }
