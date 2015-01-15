@@ -52,16 +52,7 @@ int pingDistance()
 
 int stopSwitch()
 {
-  int microswitch = input(switchport);
-  
-  if(microswitch == 0)
-  {
-    return 0; //switch is pressed
-  }
-  else
-  {
-    return 1; //switch is not pressed
-  }           
+  return input(switchport);        
 }
 
 
