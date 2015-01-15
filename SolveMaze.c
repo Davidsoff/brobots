@@ -18,7 +18,7 @@ void drive();
 void escape();
 void stop();
 void turn_right();
-void turn_left();
+void turn_left(int iter);
 
 int main(){
   //initialisation
@@ -35,31 +35,37 @@ int main(){
     print("state : %d\n", state);
     int right = distance[RIGHT];
     int front = distance[FRONT];
-
-
-    if(front>10){
-      state = 1;
+    int bumper = input(6);
+    if(bumper == 0){
+      state = 4;
     }
-    //Rechts grote afstand, er kan een bocht worden gemaakt, deze functie wordt aangeroepen
-    if(right > 15){
-      state = 2;     
-    }else{
-      if(front <= 10){
-        if(right <=15){
-          state = 3;
+    else
+    {      
+
+      if(front>5){
+        state = 1;
+      
+      //Rechts grote afstand, er kan een bocht worden gemaakt, deze functie wordt aangeroepen
+      }else if(right > 15){
+        state = 2;     
+      }else{
+        if(front <= 4){
+          if(right <=15){
+            state = 3;
+          }
         }
       }
-    }
-    if(front <= 5){
-        state = -1;    
-    }
-  }   
+      if(front <= 2){
+          state = -1;    
+      }
+    }   
+  }  
   return 0; 
 }  
 
 void updateDistanceCog(){
   while(1){
-    distance[FRONT] = ping_cm(0);
+    distance[FRONT] = ping_cm(2);
     pause(5);
     distance[RIGHT] = ping_cm(16);
     pause(5);
@@ -88,10 +94,12 @@ void driveStateCog(){
         state = 0;
       break;
       case 3:
-        left_turn_count++;
-        turn_left();
+        turn_left(left_turn_count++);
         state = 0;
       break;
+      case 4:
+        escape_bumper();
+        state = 0;
       default:
         left_turn_count = 0;
         state = 0;
@@ -116,15 +124,21 @@ void stop(){
   drive_speed(0,0);
 }
 
+void escape_bumper(){
+  escape();
+  drive_goto(-6, 6); 
+}  
+
 //robot draait 90 graden naar rechts          
 void turn_right(){
-  drive_goto(-2, -2);
+  drive_goto(12, 12);
   drive_goto(26, -25);
   drive_goto(50, 50);
 }
 
 //robot draait 90 graden naar links
-void turn_left(){
-  drive_goto(0,0);
+void turn_left(int iter){
+  if(iter == 0)
+    drive_goto(-5, -5);
   drive_goto(-26, 25);
 }    
