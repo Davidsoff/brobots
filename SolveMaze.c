@@ -30,10 +30,11 @@ int main(){
  
   //main program loop
   while(1){
-    pause(100);
+    print("front : %d\n", distance[FRONT]);
+    print("right : %d\n", distance[RIGHT]);
+    print("state : %d\n", state);
     int right = distance[RIGHT];
     int front = distance[FRONT];
-    
     int bumper = input(6);
     if(bumper == 0){
       state = 4;
@@ -41,15 +42,20 @@ int main(){
     else
     {      
 
-      if(right > 10){
-        state = 2;     
-      }else if(right < 10 && front <= 3 ){
-        state = 3;
-      }else if(front>3){
+      if(front>5){
         state = 1;
       
       //Rechts grote afstand, er kan een bocht worden gemaakt, deze functie wordt aangeroepen
+      }else if(right > 15){
+        state = 2;     
       }else{
+        if(front <= 4){
+          if(right <=15){
+            state = 3;
+          }
+        }
+      }
+      if(front <= 2){
           state = -1;    
       }
     }   
@@ -60,9 +66,9 @@ int main(){
 void updateDistanceCog(){
   while(1){
     distance[FRONT] = ping_cm(2);
-    pause(6);
+    pause(5);
     distance[RIGHT] = ping_cm(16);
-    pause(6);
+    pause(5);
     
   }  
 }  
@@ -126,7 +132,7 @@ void stop(){
 
 void escape_bumper(){
   escape();
-  drive_goto(-3, 3); 
+  drive_goto(-6, 6); 
 }  
 
 //robot draait 90 graden naar rechts          
