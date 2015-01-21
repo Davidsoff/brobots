@@ -70,6 +70,12 @@ void updateDistanceCog(){
 void driveStateCog(){
   while(1){
     switch(state){
+      case -2:
+        while(input(6)==1{
+          drive_speed(40,40);
+        }
+                  
+      
       case -1:
         left_turn_count = 0;
         escape();
