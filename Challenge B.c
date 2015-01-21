@@ -6,8 +6,8 @@
 
 //PARAMETERS
 const int SWITCHPORT = 0;
-const int PINGPORT = 1;
-const int SERVOPORT = 16;
+const int PINGPORT = 3;
+const int SERVOPORT = 17;
 const int SERVOSPEED = 25;
 const int SERVOTIME = 1000;
 const int FWSPEED = 10;
