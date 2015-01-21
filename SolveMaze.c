@@ -23,7 +23,7 @@ void turn_left(int iter);
 int main(){
   //initialisation
   int mode = 0;
-  state = 0;
+  state = -2;
   left_turn_count = 0;
   cogstart(&updateDistanceCog, NULL, scannerStack, sizeof(scannerStack));
   cogstart(&driveStateCog, NULL, stateStack, sizeof(stateStack));
@@ -71,9 +71,9 @@ void driveStateCog(){
   while(1){
     switch(state){
       case -2:
-        while(input(6)==1{
-          drive_speed(40,40);
-        }
+        
+        startup();
+       break;
                   
       
       case -1:
@@ -142,3 +142,10 @@ void turn_left(int iter){
     drive_goto(-5, -5);
   drive_goto(-26, 25);
 }    
+
+void startup(){
+  while(input(6)==1){
+    drive_speed(40,40);
+  }
+  turn_left(0);
+}  
