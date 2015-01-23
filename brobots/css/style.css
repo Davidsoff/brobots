@@ -2,3 +2,37 @@ body{
   background: url('../bg.jpg');
   background-size: cover;
 }
+
+li, a{
+  display: inline;
+}
+
+ul{
+  list-style: none;
+  height: 40px;
+}
+
+#container{
+  width: 960px;
+  margin: 0 auto;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+header{
+  width: 960px;
+  height: 200px;
+  background: rgba(255,255,255,0.8);
+}
+
+h1{
+  font-family: 'arial', 'helvetica', sans-sarif;
+}
+.navitem{
+  height: 30px;
+  margin: 5px;
+  padding: 5px;
+  display: inline-block;
+  line-height:30px;
+  background: rgba(0, 0, 40, 0.8);
+  color: #ffffff;
+}
