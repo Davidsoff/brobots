@@ -14,8 +14,8 @@ const int bumperPort = 6;
 const int maxRightTurns = 5;
 const int resetRightTurnsOnState1 = 0;
 
-
-
+volatile static int checkForBumperPress;
+volatile static int bumperPressedOnRightTurn;
 
 volatile static int distance[2];
 volatile static int state;
@@ -45,6 +45,9 @@ int main(){
   leftTurnCount = 0;
   rightTurnCount = 0;
   escapeCount = 0;
+  
+  checkForBumperPress = 0;
+  bumperPressedOnRightTurn = 0;
   
   //Start cogs
   cogstart(&updateDistanceCog, NULL, scannerStack, sizeof(scannerStack));
@@ -81,7 +84,17 @@ int main(){
     
     else{
       state = -1; 
-    }   
+    }
+    if(checkForBumperPress==1){
+      if (input(bumperPort)==0){
+        bumperPressedOnRightTurn=1;
+      }        
+    }
+    else{
+      bumperPressedOnRightTurn = 0;
+    }      
+            
+         
   }  
   return 0; 
 }  
@@ -107,9 +120,11 @@ void driveStateCog(){
     switch(state){
       case -2:
         
-        startup();
         leftTurnCount=0;
         rightTurnCount=0;
+        state = 0;
+        startup();
+        
        break;
                   
       
@@ -125,6 +140,7 @@ void driveStateCog(){
           drive_goto(1, 1);
           drive_goto(-1, -1);
           rotateRight(); 
+          drive_goto(45, 45);
           low(27);
         }                  
         state = 0;
@@ -200,15 +216,27 @@ void escapeBumper(){
 void turnRight(){
   if((maxRightTurns>0)&&(rightTurnCount>maxRightTurns)){
     startup();
+    leftTurnCount=0;
+    rightTurnCount=0;
+    state = 0;
+    
     return;
   }    
-  drive_goto(12, 12);
+  drive_goto(18, 18);
   rotateRight();
+  checkForBumperPress=1;
+  drive_goto(45, 45);
+  if(bumperPressedOnRightTurn==1){
+    turnLeft(0);
+    drive_goto(2,2);
+    rightTurnCount--;
+  }
+  checkForBumperPress=0;    
+      
 }
 
 void rotateRight(){
   drive_goto(26, -25);
-  drive_goto(50, 50);
 }  
 
 //robot turns 90 degrees to the left
@@ -219,7 +247,7 @@ void turnLeft(int iter){
 }    
 
 void startup(){
-  while(input(6)==1){
+  while(input(bumperPort)==1){
     drive_speed(40,40);
   }
   turnLeft(0);
