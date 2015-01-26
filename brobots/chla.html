@@ -2,12 +2,11 @@
 <head>
   <script type="text/javascript" src="js/shCore.js"></script>
   <script type="text/javascript" src="js/shBrushCpp.js"></script>
-  <script type="text/javascript">
-    SyntaxHighlighter.all();
-  </script>
+
   <title>Brobots</title>
   <link rel="stylesheet" href="css/style.css" media="screen" title="Stylesheet" charset="utf-8" type="text/css">
   <link rel="stylesheet" href="css/sh.css" media="screen" title="Stylesheet" charset="utf-8" type="text/css">
+  <link rel="stylesheet" href="css/shCoreDefault.css" media="screen" title="Stylesheet" charset="utf-8" type="text/css">
 </head>
 <body>
   <div id="master">
@@ -31,7 +30,7 @@
           Naast de ultrasone sensoren die we van onze docent hebben gekregen hebben we ook nog een bumper gemaakt voor de robot. Deze bumper zorgt er niet alleen voor dat de robot niet vast blijft haken, maar werkt tevens als een push switch welke we in onze software uit kunnen lezen om de robot uit lastige situaties te redden.
         </p>
         <h3>De code.</h3>
-        <pre class="brush: cpp">
+        <pre class="brush: c">
           #include "simpletools.h"                      // Include simple tools
           #include "servo.h"
           #include "ping.h"
@@ -259,6 +258,9 @@
             turnLeft(0);
           }
       </pre>
+      <script type="text/javascript">
+        SyntaxHighlighter.all();
+      </script>
       <footer>
         <span id="copyright-mark">&copy; 2015 - Team #A-mazing</span>
       </footer>
