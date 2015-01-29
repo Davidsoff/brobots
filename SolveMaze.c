@@ -1,4 +1,4 @@
-#include "simpletools.h"                      // Include simple tools
+#include "simpletools.h"                   
 #include "servo.h"
 #include "ping.h"
 #include "abdrive.h"
@@ -11,9 +11,12 @@ const int rightPingPort = 16;
 const int frontPingPort = 2;
 const int bumperPort = 6;
 
-const int maxRightTurns = 5;
+const int maxRightTurns = 5;//after so many turns, the robot will reset
 const int resetRightTurnsOnState1 = 0;
 
+
+
+//VARIABLES
 volatile static int checkForBumperPress;
 volatile static int bumperPressedOnRightTurn;
 
@@ -28,6 +31,8 @@ unsigned int stateStack[40+25];
 const int FRONT = 0;
 const int RIGHT = 1;
 
+
+//DECLARATION OF FUNCTIONS
 void updateDistanceCog();
 void driveStateCog();
 void drive();
@@ -39,6 +44,9 @@ void turnLeft(int iter);
 void startup();
 void escapeBumper();
 
+
+
+//MAIN 
 int main(){
   //initialisation
   state = -2;
@@ -66,6 +74,8 @@ int main(){
     int bumper = input(bumperPort);
     
     
+    
+    //SENSOR INPUT 
     if(bumper == 0){
       state = 4;  //Bumper is pressed
     }
@@ -83,8 +93,10 @@ int main(){
     }
     
     else{
-      state = -1; 
+      state = -1; //Get some distance 
     }
+    
+    //CHECK FOR BUMPER PRESS ON RIGHT TURN
     if(checkForBumperPress==1){
       if (input(bumperPort)==0){
         bumperPressedOnRightTurn=1;
@@ -118,7 +130,7 @@ void updateDistanceCog(){
 void driveStateCog(){
   while(1){
     switch(state){
-      case -2:
+      case -2://STARTUP
         
         leftTurnCount=0;
         rightTurnCount=0;
@@ -128,7 +140,7 @@ void driveStateCog(){
        break;
                   
       
-      case -1:
+      case -1://TOO CLOSE TO THE WALL 
         escapeCount++;
         leftTurnCount = 0;
         if(escapeCount<4){
@@ -146,12 +158,11 @@ void driveStateCog(){
         state = 0;
       break;
       
-      case 0:
+      case 0://STOP
         stop();
       break;
       
-      case 1:
-        //drive forward
+      case 1://DRIVE FORWARD
         leftTurnCount = 0;
         if(resetRightTurnsOnState1==1){
           rightTurnCount=0;
@@ -161,21 +172,20 @@ void driveStateCog(){
       break;
       
       
-      case 2:
-        //Turn right
+      case 2://TURN RIGHT
         leftTurnCount = 0;
         turnRight();
         rightTurnCount++;
         state = 0;
       break;
       
-      case 3:
+      case 3://TURN LEFT
         turnLeft(leftTurnCount++);
         rightTurnCount=0;
         state = 0;
       break;
       
-      case 4:
+      case 4://BUMPER PRESS
         escapeBumper();
         state = 0;
       break;
@@ -201,6 +211,7 @@ void escape(){
   low(26);
 }
 
+//robot stops driving
 void stop(){
   drive_speed(0,0);
 }
@@ -208,12 +219,13 @@ void stop(){
 //bumper is pressed
 void escapeBumper(){
   escape();
-  drive_goto(-3, 3); 
+  drive_goto(-3, 3); //Turn a bit to the left
 }  
 
 //robot turns 90 degrees to the right          
-     
 void turnRight(){
+  //The robot turned too much to the right, and is problably stuck in a loop
+  //run startup
   if((maxRightTurns>0)&&(rightTurnCount>maxRightTurns)){
     startup();
     leftTurnCount=0;
@@ -221,20 +233,23 @@ void turnRight(){
     state = 0;
     
     return;
-  }    
+  } 
+     
   drive_goto(18, 18);
   rotateRight();
-  checkForBumperPress=1;
+  checkForBumperPress=1;//main loop starts to check for a bumper press
   drive_goto(45, 45);
+  //If the bumper is pressed, turn back to the left
   if(bumperPressedOnRightTurn==1){
     turnLeft(0);
     drive_goto(2,2);
-    rightTurnCount--;
+    rightTurnCount--;//lower the rightcounter
   }
-  checkForBumperPress=0;    
+  checkForBumperPress=0; //main loop stops checking for a bumper press
       
 }
 
+//robot rotates 90 degrees to the right
 void rotateRight(){
   drive_goto(26, -25);
 }  
@@ -246,6 +261,7 @@ void turnLeft(int iter){
   drive_goto(-26, 25);
 }    
 
+//robot keeps driving till the bumper is pressed
 void startup(){
   while(input(bumperPort)==1){
     drive_speed(40,40);
